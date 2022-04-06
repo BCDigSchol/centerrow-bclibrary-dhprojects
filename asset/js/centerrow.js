@@ -1,4 +1,55 @@
+if (!CenterRow) {
+    var CenterRow = {};
+}
+
 (function($) {
+
+    CenterRow.megaMenu = function (menuSelector, customMenuOptions) {
+        if (typeof menuSelector === 'undefined') {
+            menuSelector = 'header nav';
+        }
+
+        var menuOptions = {
+            /* prefix for generated unique id attributes, which are required
+             to indicate aria-owns, aria-controls and aria-labelledby */
+            uuidPrefix: "accessible-megamenu",
+
+            /* css class used to define the megamenu styling */
+            menuClass: "nav-menu",
+
+            /* css class for a top-level navigation item in the megamenu */
+            topNavItemClass: "nav-item",
+
+            /* css class for a megamenu panel */
+            panelClass: "sub-nav",
+
+            /* css class for a group of items within a megamenu panel */
+            panelGroupClass: "sub-nav-group",
+
+            /* css class for the hover state */
+            hoverClass: "hover",
+
+            /* css class for the focus state */
+            focusClass: "focus",
+
+            /* css class for the open state */
+            openClass: "open",
+
+            openOnMouseover: true,
+        };
+
+        $.extend(menuOptions, customMenuOptions);
+
+        $(menuSelector).accessibleMegaMenu(menuOptions);
+    };
+
+    CenterRow.mobileMenu = function() {
+        $('.menu-button').click( function(e) {
+            e.preventDefault();
+            $('header nav > ul').toggleClass('open');
+        });
+    };
+
     $(document).ready(function() {
 
         $('#search-form').addClass('closed');
@@ -9,39 +60,5 @@
                 $('#query').focus();
             }
         });
-
-        if ($.isFunction($.fn.lightSlider)) {
-            $('#itemfiles, .item-with-metadata .lightgallery').lightSlider({
-                mode: 'fade',
-                autoWidth: true,
-                adaptiveHeight:false,
-                gallery:true,
-                item:1,
-                loop:true,
-                thumbItem:15,
-                slideMargin:0,
-                enableDrag: false,
-                currentPagerPosition:'middle',
-                onSliderLoad: function(el) {
-                    el.lightGallery({
-                        selector: '#itemfiles .media, .item-with-metadata .lightgallery .media',
-                        download: false,
-                        zoom: true,
-                        youtubePlayerParams: {
-                            modestbranding: 1,
-                            showinfo: 0,
-                            rel: 0,
-                            controls: 1
-                        },
-                        vimeoPlayerParams: {
-                            byline : 0,
-                            portrait : 0,
-                            color : 'A90707'
-                        },
-                    });
-                }
-            });
-        }
-
     });
 })(jQuery)
