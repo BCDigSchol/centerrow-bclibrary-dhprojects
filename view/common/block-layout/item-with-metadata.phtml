@@ -11,8 +11,8 @@ $this->headScript()->appendFile($this->assetUrl('js/lg-zoom.js'));
 ?>
 <div class="item-with-metadata">
 <?php foreach($attachments as $attachment): ?>
-    <?php 
-      $item = $attachment->item(); 
+    <?php
+      $item = $attachment->item();
       $imageMedia = [];
       $otherMedia = [];
       foreach ($item->media() as $media) {

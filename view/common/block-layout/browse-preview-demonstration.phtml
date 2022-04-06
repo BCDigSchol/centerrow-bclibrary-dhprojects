@@ -1,0 +1,142 @@
+<?php
+
+/**
+ * CUSTOMIZATION NOTES
+ *
+ * Item records are stored in the $resources array. Each individual resource can be accessed
+ * through individual $resource objects.
+ *
+ * Use the $resource->value($field_name, [$options]) function to get field values. For
+ * example:
+ *
+ *    $resource->value('dcterms:date') - returns the item's first date value
+ *    $resource->value('dcterms:subject', ['all' => true]) - returns all the item's subject values
+ *
+ * Use $resource->link($link_text, [$link_type, $options]) to create a link:
+ *
+ *    $resource->link('View the map') - link to view the item
+ *    $resource->link('Edit the map', 'edit') - link to edit the item
+ *    $resource->link('', null, ['class' => 'viewit-link']) - link to view item, <a> element has class="viewit-link"
+ *
+ * See below for examples.
+ *
+ * More info at https://omeka.org/s/docs/developer/api/representations/
+ *
+ */
+
+?>
+
+
+<?php
+/**
+ * @var \Laminas\View\Renderer\PhpRenderer $this
+ * @var \Omeka\Api\Representation\SiteRepresentation $site
+ * @var string $resourceType
+ * @var \Omeka\Api\Representation\AbstractResourceEntityRepresentation[] $resources
+ * @var string $heading
+ * @var string $linkText
+ * @var array $components
+ * @var array $query
+ * @var array $sortHeadings
+ * @var array|false $pagination
+ */
+
+$plugins = $this->getHelperPluginManager();
+$escape = $plugins->get('escapeHtml');
+$translate = $plugins->get('translate');
+$thumbnail = $plugins->get('thumbnail');
+$siteSetting = $plugins->get('siteSetting');
+
+$showThumbnail = in_array('thumbnail', $components);
+$showHeading = in_array('resource-heading', $components);
+$showBody = in_array('resource-body', $components);
+$headingTerm = $siteSetting('browse_heading_property_term');
+$bodyTerm = $siteSetting('browse_body_property_term');
+
+$untitled = $translate('[Untitled]');
+
+$filterLocale = (bool)$siteSetting('filter_locale_values');
+$lang = $filterLocale ? $this->lang() : null;
+$langValue = $filterLocale ? [$this->lang(), ''] : null;
+?>
+
+<div class="block preview-block">
+
+    <?php if (!empty($heading)): ?>
+        <h2><?= $heading ?></h2>
+    <?php endif; ?>
+
+    <?php if (!empty($sortHeadings)): ?>
+        <div class="browse-controls">
+            <?= $this->sortSelector($sortHeadings) ?>
+        </div>
+    <?php endif; ?>
+
+    <ul class="resource-list preview">
+        <?php
+        foreach ($resources as $resource):
+            $heading = $headingTerm ? $resource->value($headingTerm, ['default' => $untitled, 'lang' => $langValue]) : $resource->displayTitle(null, $lang);
+            $body = $bodyTerm ? $resource->value($bodyTerm, ['lang' => $langValue]) : $resource->displayDescription(null, $lang);
+            ?>
+            <li class="<?= $resourceType ?> resource">
+
+                <!-- Thumbnail -->
+                <?php if ($showThumbnail): ?>
+                    <?= $resource->linkRaw($thumbnail($resource, 'medium', ['title' => $heading])) ?>
+                <?php endif; ?>
+
+                <!-- Display link to item -->
+                <?php if ($showHeading): ?>
+                    <h4><?= $resource->link($heading) ?></h4>
+                <?php endif; ?>
+
+                <!-- This list displays several metadata fields for demonstration -->
+                <dl class="browse-preview__metadata">
+
+                    <!-- A simple, one-value field. -->
+                    <dt>Date</dt>
+                    <dd><?= $resource->value('dcterms:date') ?></dd>
+
+                    <!-- A multi-value field. Use a foreach loop to iterate through the values. -->
+                    <dt>Subjects</dt>
+                    <dd>
+                        <ul>
+                            <?php foreach ($resource->value('dcterms:subject', ['all' => true]) as $subject): ?>
+                            <li><?= $subject ?>
+                            <?php endforeach; ?>
+                        </ul>
+                    </dd>
+
+                    <!-- Without the ['all' => true] option, only the first value is returned. -->
+                    <dt>Just the first subject</dt>
+                    <dd>
+                        <?= $resource->value('dcterms:subject') ?>
+                    </dd>
+
+                    <!-- Non Dublin Core vocabularies work too. -->
+                    <dt>Short title</dt>
+                    <dd><?= $resource->value('bibo:shortTitle') ?></dd>
+
+                </dl>
+
+                <!-- Body -->
+                <?php if ($showBody && $body): ?>
+                    <div class="description"><?= $escape($body) ?></div>
+                <?php endif; ?>
+
+
+            </li>
+        <?php endforeach; ?>
+    </ul>
+
+    <?php if (!empty($pagination)): ?>
+        <?= $this->pagination() ?>
+    <?php endif; ?>
+
+    <?php if ($linkText): ?>
+        <?php $this->hyperlink($linkText, $this->url(
+            'site/resource', ['controller' => $resourceType, 'action' => 'browse', 'site-slug' => $site->slug()], ['query' => $query], true
+        )) ?>
+    <?php endif; ?>
+
+</div>
