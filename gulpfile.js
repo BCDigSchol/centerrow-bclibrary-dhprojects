@@ -1,6 +1,7 @@
 'use strict';
 
 var gulp = require('gulp');
+var browserSync = require('browser-sync').create();
 
 gulp.task('css', function () {
     var sass = require('gulp-sass')(require('sass'));
@@ -15,9 +16,14 @@ gulp.task('css', function () {
         .pipe(postcss([
             autoprefixer()
         ]))
-        .pipe(gulp.dest('./asset/css'));
+        .pipe(gulp.dest('./asset/css'))
+        .pipe(browserSync.stream());
 });
 
 gulp.task('css:watch', function () {
+    browserSync.init({
+        proxy: "localhost:8080"
+    });
+
     gulp.watch('./asset/sass/*.scss', gulp.series('css'));
 });
