@@ -1,1 +1,46 @@
 /** LOCAL STYLE CHANGES FROM DHPROJECTS  */
+
+
+/* Big screen devices (1281px and above) */
+@media only screen and (min-width: 1281px) {
+  #wrap {
+    max-width: 1280px;
+  }
+}
+
+$box-bottom-margin: 6em;
+
+.item-show {
+
+  &__main-box-and-media {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-bottom: $box-bottom-margin;
+  }
+
+  &__title {
+    margin-top: 0;
+  }
+
+  &__media-box {
+    width: 54%;
+  }
+
+  &__metadata-box {
+    width: 39%;
+    margin-right: 4%;
+  }
+
+  &__media-list {
+    padding: 2%;
+  }
+
+  &__metadata-section {
+    display: flex;flex-flow: wrap;justify-content: space-between;
+    margin-bottom: $box-bottom-margin;
+
+    .single-metadata-field__field {
+      width: 48%;
+    }
+  }
+}

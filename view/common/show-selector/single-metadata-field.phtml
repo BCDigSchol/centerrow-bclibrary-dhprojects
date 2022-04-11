@@ -1,0 +1,21 @@
+<?php
+/**
+ * Displays a single metadata field, including the label and value(s).
+ *
+ * Available variables:
+ *
+ * @var \Laminas\View\Renderer\PhpRenderer $this the current object
+ * @var \Omeka\Api\Representation\ValueRepresentation[] $values
+ * @var string $label a cleaned, translated label for the field
+ * @var string $class a cleaned class name for the field
+ */
+?>
+<div class="single-metadata-field__field single-metadata-field__field--<?= $class ?>">
+    <h4 class="single-metadata-field__label"><?= $label ?></h4>
+
+    <!-- Display each value in the list. -->
+    <?php foreach ($values as $value): ?>
+        <div class="single-metadata-field__value"><?= $value->asHtml() ?></div>
+    <?php endforeach; ?>
+
+</div>
