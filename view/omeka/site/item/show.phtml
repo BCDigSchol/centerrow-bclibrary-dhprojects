@@ -1,3 +1,6 @@
+<?php // Add class to the <head> for styling. ?>
+<?php $this->htmlElement('body')->appendAttribute('class', 'item resource show'); ?>
+
 <?php if ($this->themeSetting('use_show_selector')): ?>
 
     <?php // If the local BC customizations are turned on in the theme settings, use them. ?>
@@ -8,7 +11,6 @@
     <?php // Otherwise, show the normal show page ?>
     <?php
     $escape = $this->plugin('escapeHtml');
-    $this->htmlElement('body')->appendAttribute('class', 'item resource show');
     $this->headLink()->appendStylesheet($this->assetUrl('css/lightslider.min.css'));
     $this->headLink()->appendStylesheet($this->assetUrl('css/lightgallery.min.css'));
     $this->headScript()->appendFile($this->assetUrl('js/lightslider.min.js'));
