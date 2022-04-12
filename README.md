@@ -1,4 +1,8 @@
 # Center Row
+
+BC Digital Humanities is currently using
+the [local-v1.7.2](https://github.com/BCDigSchol/centerrow-bclibrary-dhprojects/tree/local-v1.7.2) branch for development.
+
 ## Copyright
 Center Row is Copyright © 2016-present Corporation for Digital Scholarship, Vienna, Virginia, USA http://digitalscholar.org
 
