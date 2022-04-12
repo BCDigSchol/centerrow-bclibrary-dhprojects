@@ -38,26 +38,24 @@ $this->htmlElement('body')->appendAttribute('class', 'item resource show');
 
     <!-- Display a block of metadata -->
     <!-- The items will appear in a grid. Missing fields will not display at all. -->
-    <h3 class="item-show__artwork-details-label">Artwork details</h3>
+    <!-- The specific fields included are just for demonstration. Feel free to change them! -->
+    <h3 class="item-show__artwork-details-label">Top heading</h3>
     <div class="item-show__metadata-section item-show__artwork-details">
         <?= $this->DHSingleMetadataField('dcterms:title', $item) ?>
+        <?= $this->DHSingleMetadataField('dcterms:creator', $item) ?>
+        <?= $this->DHSingleMetadataField('dcterms:contributor', $item) ?>
         <?= $this->DHSingleMetadataField('dcterms:subject', $item) ?>
-        <?= $this->DHSingleMetadataField('dcterms:title', $item) ?>
-        <?= $this->DHSingleMetadataField('dcterms:title', $item) ?>
-        <?= $this->DHSingleMetadataField('dcterms:title', $item) ?>
-        <?= $this->DHSingleMetadataField('dcterms:title', $item) ?>
+        <?= $this->DHSingleMetadataField('dcterms:source', $item) ?>
+        <?= $this->DHSingleMetadataField('dcterms:spatial', $item) ?>
     </div>
 
-    <h3 class="item-show__repository-and-provenance-label">Repository and Provenance</h3>
+    <h3 class="item-show__repository-and-provenance-label">Bottom heading</h3>
     <div class="item-show__metadata-section item-show__repository-and-provenance">
-        <?= $this->DHSingleMetadataField('dcterms:title', $item) ?>
-        <?= $this->DHSingleMetadataField('dcterms:title', $item) ?>
-        <?= $this->DHSingleMetadataField('dcterms:title', $item) ?>
-        <?= $this->DHSingleMetadataField('dcterms:title', $item) ?>
+        <?= $this->DHSingleMetadataField('dcterms:publisher', $item) ?>
+        <?= $this->DHSingleMetadataField('dcterms:type', $item) ?>
+        <?= $this->DHSingleMetadataField('dcterms:format', $item) ?>
+        <?= $this->DHSingleMetadataField('dcterms:language', $item) ?>
         <?= $this->DHSingleMetadataField('dcterms:provenance', $item) ?>
-        <?= $this->DHSingleMetadataField('dcterms:title', $item) ?>
-        <?= $this->DHSingleMetadataField('dcterms:title', $item) ?>
-        <?= $this->DHSingleMetadataField('dcterms:title', $item) ?>
     </div>
 
 </div>
