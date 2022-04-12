@@ -1,6 +1,5 @@
 /** LOCAL STYLE CHANGES FROM DHPROJECTS  */
 
-
 /* Big screen devices (1281px and above) */
 @media only screen and (min-width: 1281px) {
   #wrap {
@@ -9,6 +8,8 @@
 }
 
 $box-bottom-margin: 6em;
+
+$text-gray: #707070;
 
 .item-show {
 
@@ -20,6 +21,11 @@ $box-bottom-margin: 6em;
 
   &__title {
     margin-top: 0;
+  }
+
+  &__date {
+    display: block;
+    color: $text-gray;
   }
 
   &__media-box {
@@ -36,11 +42,21 @@ $box-bottom-margin: 6em;
   }
 
   &__metadata-section {
-    display: flex;flex-flow: wrap;justify-content: space-between;
+    display: flex;
+    flex-flow: wrap;
+    justify-content: space-between;
     margin-bottom: $box-bottom-margin;
 
-    .single-metadata-field__field {
-      width: 48%;
+    .single-metadata-field {
+
+      &__label {
+        margin-bottom: .5em;
+      }
+
+      &__field {
+        width: 48%;
+        margin-bottom: 1em;
+      }
     }
   }
 }
