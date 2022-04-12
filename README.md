@@ -2,6 +2,8 @@
 
 ## BC customizations
 
+Customizations are not active by default. Activate them in the site's theme settings under **Use BCDH customizations**.
+
 Whenever possible we've minimized the amount of PHP in views and moved it to custom helper functions instead. This makes
 it easier to understand the HTML layout of pages and easier to understand the logic of view functions.
 
