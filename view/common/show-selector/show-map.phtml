@@ -1,36 +1,13 @@
 <?php
 
 /**
- * CUSTOMIZATION NOTES
- *
- * Item records are stored in the $item objects.
- *
- * Use the $item->value($field_name, [$options]) function to get field values. For
- * example:
- *
- *    $item->value('dcterms:date') - returns the item's first date value
- *    $item->value('dcterms:subject', ['all' => true]) - returns all the item's subject values
- *
- * Use $item->link($link_text, [$link_type, $options]) to create a link:
- *
- *    $item->link('View the map') - link to view the item
- *    $item->link('Edit the map', 'edit') - link to edit the item
- *    $item->link('', null, ['class' => 'viewit-link']) - link to view item, <a> element has class="viewit-link"
- *
- * See below for examples.
- *
- * More info at https://omeka.org/s/docs/developer/api/representations/
+ * Show a map item
  *
  * @var \Omeka\Api\Representation\AbstractResourceEntityRepresentation $item
- *
  */
 
 // Add a class name to the body so we can style based on page.
 $this->htmlElement('body')->appendAttribute('class', 'item resource show');
-
-// Add any stylesheets and javascripts we need.
-$this->DHAddStylesheets(['lightslider.min.css', 'lightgallery.min.css']);
-$this->DHAddStylesheets(['lightslider.min.js', 'lightgallery.min.js', 'lg-video.min.js', 'lg-zoom.js']);
 
 ?>
 

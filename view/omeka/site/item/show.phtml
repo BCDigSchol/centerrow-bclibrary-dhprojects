@@ -1,55 +1,98 @@
-<?php
+<?php if ($this->themeSetting('use_show_selector')): ?>
 
-/**
- * Choose item page based on metadata
- *
- * Replace show.phtml with this page to choose the item page based on metadata.
- *
- * Create a custom item templates based on the metadata you are interested in. The
- * different item templates are stored in the theme view directory:
- *
- *       /view/common/show-selector
- *
- * Metadata fields you can use include:
- *
- *     * Does the item have media?
- *     * Resource class (e.g. 'bibo:Book', 'bibo:Map')
- *     * The item's site (taken from URL, e.g. 'test-site')
- *     * Item sets the item belongs to (e.g. 'Historical Maps')
- *
- * See the example code below.
- *
- */
+    <?php // If the local BC customizations are turned on in the theme settings, use them. ?>
+    <?= $this->DHSelectShowPage($item) ?>
 
-/**
- * @var Omeka\Api\Representation\ItemRepresentation $item
- */
+<?php else: ?>
 
-// Get the current item's resource class.
-$show_selector_class = $item->resourceClass()->term();
+    <?php // Otherwise, show the normal show page ?>
+    <?php
+    $escape = $this->plugin('escapeHtml');
+    $this->htmlElement('body')->appendAttribute('class', 'item resource show');
+    $this->headLink()->appendStylesheet($this->assetUrl('css/lightslider.min.css'));
+    $this->headLink()->appendStylesheet($this->assetUrl('css/lightgallery.min.css'));
+    $this->headScript()->appendFile($this->assetUrl('js/lightslider.min.js'));
+    $this->headScript()->appendFile($this->assetUrl('js/lightgallery.min.js'));
+    $this->headScript()->appendFile($this->assetUrl('js/lg-video.min.js'));
+    $this->headScript()->appendFile($this->assetUrl('js/lg-zoom.js'));
 
-// Does it have media associated with it?
-$show_selector_has_no_media = sizeof($item->media()) === 0;
+    $lightMedia = [];
+    $otherMedia = [];
+    $whitelist = ['image/bmp', 'image/gif', 'image/jpeg', 'image/png', 'image/svg+xml'];
+    foreach ($item->media() as $media) {
+        $mediaType = $media->mediaType();
+        $mediaRenderer = $media->renderer();
+        if (in_array($mediaType, $whitelist) || (strpos($mediaRenderer, 'youtube') !== false)) {
+            $lightMedia[] = $media;
+        } else {
+            $otherMedia[] = $media;
+        }
+    }
 
-// Determine show page based on whether item has media and what its resource class is.
-if ($show_selector_has_no_media) {
-    echo $this->partial('common/show-selector/show-no-media');
-} elseif ($show_selector_class === 'bibo:Map') {
-    echo $this->partial('common/show-selector/show-map');
-} elseif ($show_selector_class === 'bibo:Book') {
-    echo $this->partial('common/show-selector/show-book');
-} else {
-    echo $this->partial('common/show-selector/show-default');
-}
+    //insert universal viewer
+    $useUniversalViewer = true;
+    foreach ($item->media() as $media) {
+        $mediaType = $media->mediaType();
+        $mediaRenderer = $media->renderer();
+        if (strpos($mediaType, 'image/') === false
+            && $mediaType !== 'application/pdf'
+            && $mediaRenderer !== 'iiif'
+        ) {
+            $useUniversalViewer = false;
+            break;
+        }
+    }
+    ?>
 
-/* Other possibilities to determine selected show page. */
+    <?php echo $this->pageTitle($item->displayTitle(), 2); ?>
 
-// Site name (e.g. 'test-site')
-$show_selector_site = $this->plugin('Laminas\View\Helper\ViewModel')->getRoot()->getVariable('site')->slug();
+    <div class="properties">
+        <?php $this->trigger('view.show.after'); ?>
+        <div class="allMetadata">
+            <?php echo $item->displayValues(); ?>
 
-// First item set (we could get all sets if we needed to)
-$show_selector_all_sets = $item->itemSets();
-$show_selector_item_set = array_shift($show_selector_all_sets);
+            <?php if (count($otherMedia) > 0): ?>
+                <div id="other-media" class="property">
+                    <h4><?php echo $this->translate('Other Media'); ?></h4>
+                    <div class="values">
+                        <?php foreach ($otherMedia as $media): ?>
+                            <div class="value">
+                                <a href="<?php echo $media->siteUrl(); ?>"><?php echo $media->displayTitle(); ?></a>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+
+            <?php $itemSets = $item->itemSets(); ?>
+
+            <?php if (count($itemSets) > 0): ?>
+                <div class="property">
+                    <h4><?php echo $this->translate('Item sets'); ?></h4>
+                    <div class="values">
+                        <?php foreach ($item->itemSets() as $itemSet): ?>
+                            <div class="value"><a
+                                        href="<?php echo $escape($itemSet->url()); ?>"><?php echo $itemSet->displayTitle(); ?></a>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+
+        <?php
+        $page = $this->params()->fromQuery('page', 1);
+        $property = $this->params()->fromQuery('property');
+        $subjectValues = $item->displaySubjectValues($page, 25, $property);
+        ?>
+        <?php if ($subjectValues): ?>
+            <div id="item-linked">
+                <h3><?php echo $this->translate('Linked resources'); ?></h3>
+                <?php echo $subjectValues; ?>
+            </div>
+        <?php endif; ?>
+
+    </div>
 
 
-
+<?php endif; ?>
