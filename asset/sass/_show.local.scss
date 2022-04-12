@@ -1,0 +1,55 @@
+/** LOCAL STYLE CHANGES FROM DHPROJECTS  */
+
+$box-bottom-margin: 6em;
+
+$text-gray: #707070;
+
+.item-show {
+
+  &__main-box-and-media {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-bottom: $box-bottom-margin;
+  }
+
+  &__title {
+    margin-top: 0;
+  }
+
+  &__date {
+    display: block;
+    color: $text-gray;
+  }
+
+  &__media-box {
+    width: 54%;
+  }
+
+  &__metadata-box {
+    width: 39%;
+    margin-right: 4%;
+  }
+
+  &__media-list {
+    padding: 2%;
+  }
+
+  &__metadata-section {
+    display: flex;
+    flex-flow: wrap;
+    justify-content: space-between;
+    margin-bottom: $box-bottom-margin;
+
+    .single-metadata-field {
+
+      &__label {
+        margin-bottom: .5em;
+      }
+
+      &__field {
+        width: 48%;
+        margin-bottom: 1em;
+      }
+    }
+  }
+}
