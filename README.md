@@ -39,6 +39,7 @@ We've added new helper functions to make it easier to write and read partials:
 | `DHSingleMetadataField()` | returns HTML to display a single metadata field |
 | `DHAddStylesheets()` | adds a list of stylesheets to the current render |
 | `DHAddScripts()` | adds a lis of scripts to the current page |
+| `DHSelectShowPage()` | selects a show item page based on page metadata |
 
 ## Copyright
 
