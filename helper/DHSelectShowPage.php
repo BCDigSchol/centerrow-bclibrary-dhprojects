@@ -29,6 +29,13 @@ class DHSelectShowPage extends \Laminas\View\Helper\AbstractHelper
     public function __invoke(ItemRepresentation $item)
     {
         $partial = $this->getView()->plugin('partial');
+        return $partial('common/show-selector/show-default');
+
+        /**
+         * Below are possible ways to select different show pages based on various
+         * criteria. This code might not work for all collections, especially
+         * if they don't use resource classes.
+
 
         // Get the current item's resource class.
         $show_selector_class = $item->resourceClass()->term();
@@ -46,10 +53,6 @@ class DHSelectShowPage extends \Laminas\View\Helper\AbstractHelper
         } else {
             $return_partial = $partial('common/show-selector/show-default');
         }
-
-        return $return_partial;
-
-        /* Other possibilities to determine selected show page.
 
         // Site name (e.g. 'test-site')
         $show_selector_site = $this->plugin('Laminas\View\Helper\ViewModel')->getRoot()->getVariable('site')->slug();
