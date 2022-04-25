@@ -4,6 +4,10 @@ $box-bottom-margin: 6em;
 
 $text-gray: #707070;
 
+div.properties.item-show {
+  display: block; // Reset to handle cases where .properties class has different display value
+}
+
 .item-show {
 
   &__main-box-and-media {
