@@ -28,40 +28,52 @@ class DHSelectShowPage extends \Laminas\View\Helper\AbstractHelper
      */
     public function __invoke(ItemRepresentation $item)
     {
+
         $partial = $this->getView()->plugin('partial');
-        return $partial('common/show-selector/show-default');
+
+        if ($item->resourceClass()) {
+            $show_selector_class = $item->resourceClass()->term();
+        } else {
+            $show_selector_class = 'bibo:BookSection';
+        }
+
+        if ($show_selector_class === 'bibo:BookSection') {
+            return $partial('common/show-selector/show-location');
+        } else {
+            $partial = $this->getView()->plugin('partial');
+            return $this->getView()->partial('common/show-selector/show-traveller');
+        }
 
         /**
          * Below are possible ways to select different show pages based on various
          * criteria. This code might not work for all collections, especially
          * if they don't use resource classes.
-
-
-        // Get the current item's resource class.
-        $show_selector_class = $item->resourceClass()->term();
-
-        // Does it have media associated with it?
-        $show_selector_has_no_media = sizeof($item->media()) === 0;
-
-        // Determine show page based on whether item has media and what its resource class is.
-        if ($show_selector_has_no_media) {
-            $return_partial = $partial('common/show-selector/show-no-media');
-        } elseif ($show_selector_class === 'bibo:Map') {
-            $return_partial = $partial('common/show-selector/show-map');
-        } elseif ($show_selector_class === 'bibo:Book') {
-            $return_partial = $partial('common/show-selector/show-book');
-        } else {
-            $return_partial = $partial('common/show-selector/show-default');
-        }
-
-        // Site name (e.g. 'test-site')
-        $show_selector_site = $this->plugin('Laminas\View\Helper\ViewModel')->getRoot()->getVariable('site')->slug();
-
-        // First item set (we could get all sets if we needed to)
-        $show_selector_all_sets = $item->itemSets();
-        $show_selector_item_set = array_shift($show_selector_all_sets);
-
-        */
+         *
+         *
+         * // Get the current item's resource class.
+         * $show_selector_class = $item->resourceClass()->term();
+         *
+         * // Does it have media associated with it?
+         * $show_selector_has_no_media = sizeof($item->media()) === 0;
+         *
+         * // Determine show page based on whether item has media and what its resource class is.
+         * if ($show_selector_has_no_media) {
+         * $return_partial = $partial('common/show-selector/show-no-media');
+         * } elseif ($show_selector_class === 'bibo:Map') {
+         * $return_partial = $partial('common/show-selector/show-map');
+         * } elseif ($show_selector_class === 'bibo:Book') {
+         * $return_partial = $partial('common/show-selector/show-book');
+         * } else {
+         * $return_partial = $partial('common/show-selector/show-default');
+         * }
+         *
+         * // Site name (e.g. 'test-site')
+         * $show_selector_site = $this->plugin('Laminas\View\Helper\ViewModel')->getRoot()->getVariable('site')->slug();
+         *
+         * // First item set (we could get all sets if we needed to)
+         * $show_selector_all_sets = $item->itemSets();
+         * $show_selector_item_set = array_shift($show_selector_all_sets);
+         */
     }
 
 }

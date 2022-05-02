@@ -22,15 +22,18 @@ class DHSingleMetadataField extends AbstractHelper
             return '';
         }
 
+        // Convert the values to HTML strings for use in display.
+        $value_strings = array_map(function ($value) { return $value->asHtml();}, $values);
+
         // If we've made it here we need to display the field. First load the partial
         // plugin.
         $partial = $this->getView()->plugin('partial');
 
         // Now set the options for the partial.
         /** @var DisplayLabel $label */
-        $label = $this->getView()->DHGetLabel($values[0]);
+        $label = $this->getView()->DHGetLabel($values[0], $item, $field);
         $options = [
-            'values' => $values,
+            'values' => $value_strings,
             'label' => $label->html,
             'class' => $label->class
         ];

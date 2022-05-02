@@ -3,6 +3,7 @@
 namespace OmekaTheme\Helper;
 
 use Laminas\View\Helper\AbstractHelper;
+use Omeka\Api\Representation\ItemRepresentation;
 use Omeka\Api\Representation\ValueRepresentation;
 
 /**
@@ -24,15 +25,21 @@ class DHGetLabel extends AbstractHelper
 {
     private $translate;
     private $escape;
+    private $local_labels = [];
 
-    public function __invoke(ValueRepresentation $value): DisplayLabel
+    public function __invoke(ValueRepresentation $value, ItemRepresentation $item, string $field): DisplayLabel
     {
+        // Load the local labels if we haven't already.
+        if (! isset($this->local_labels[$item->id()])) {
+            $this->loadLocalLabels($item);
+        }
+
         // Helper plugins for translating and cleaning the label.
         $this->translate = $this->getView()->plugin('translate');
         $this->escape = $this->getView()->plugin('escapeHtml');
 
-        // Get the original label string.
-        $label = $value->property('label')->label();
+        // If there is a local label, use it. Otherwise, use the default label.
+        $label = $this->local_labels[$item->id()][$field] ?? $value->property('label')->label();
 
         // Return a DisplayLabel.
         return new DisplayLabel($this->buildHTML($label), $this->buildClassName($label));
@@ -60,6 +67,20 @@ class DHGetLabel extends AbstractHelper
 
         // Clean any HTML and return it.
         return call_user_func_array($this->escape, [$html]);
+    }
+
+    private function loadLocalLabels(ItemRepresentation $item)
+    {
+        // The template has local customizations of label names and descriptions. Build a table of the
+        // important values from the template to pass to views.
+        $template = $item->resourceTemplate();
+        $this->local_labels[$item->id()] = [];
+        if ($template) {
+            foreach ($template->resourceTemplateProperties() as $template_property) {
+                $term = $template_property->property()->term();
+                $this->local_labels[$item->id()][$term] = $template_property->alternateLabel();
+            }
+        }
     }
 }
 
