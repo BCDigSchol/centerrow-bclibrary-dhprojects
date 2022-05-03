@@ -11,11 +11,11 @@
  */
 ?>
 <div class="single-metadata-field__field single-metadata-field__field--<?= $class ?>">
-    <h4 class="single-metadata-field__label"><?= $label ?></h4>
+    <h5 class="single-metadata-field__label"><?= $label ?></h5>
 
     <!-- Display each value in the list. -->
     <?php foreach ($values as $value): ?>
-        <div class="single-metadata-field__value"><?= $value->asHtml() ?></div>
+        <div class="single-metadata-field__value"><?= $value ?></div>
     <?php endforeach; ?>
 
 </div>
